@@ -1,5 +1,5 @@
-from flask import Flask
-
+from flask import Flask, render_template
+import json
 
 app = Flask(__name__)
 
@@ -16,7 +16,11 @@ def render_goals(goal):
 
 @app.route('/profiles/<teacher_id>/')
 def render_profiles(teacher_id):
-    return f'здесь будет преподаватель c id {teacher_id}'
+    with open('static/teachers.json', 'r') as f:
+        teachers = json.load(f)
+    with open('static/goals.json', 'r') as f:
+        goals = json.load(f)
+    return render_template('profile.html', teacher=teachers[int(teacher_id)], goals=goals)
 
 
 @app.route('/request/')
@@ -39,6 +43,6 @@ def render_booking_done():
     return 'заявка отправлена'
 
 
-if __name__ == '__main__':
-    app.run()
+#if __name__ == '__main__':
+app.run(debug=True)
 
